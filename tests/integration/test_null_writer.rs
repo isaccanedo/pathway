@@ -1,0 +1,35 @@
+// Copyright © 2024 Pathway
+
+use pathway_engine::engine::{Key, Timestamp};
+
+use pathway_engine::connectors::data_format::{Formatter, FormatterContext, NullFormatter};
+use pathway_engine::connectors::data_storage::{NullWriter, Writer};
+
+#[test]
+fn test_null_formatter_ok() -> eyre::Result<()> {
+    let mut formatter = NullFormatter::new();
+    let key = Key::random();
+    let context = formatter
+        .format(&key, &Vec::new(), Timestamp(1), 1)
+        .expect("Formatter failed");
+
+    assert!(context.payloads.is_empty());
+    assert_eq!(context.key, key);
+    assert_eq!(context.values, Vec::new());
+
+    Ok(())
+}
+
+#[test]
+fn test_null_writer_ok() -> eyre::Result<()> {
+    let mut writer = NullWriter::new();
+    let context = FormatterContext::new_single_payload(
+        b"hello".to_vec(),
+        Key::random(),
+        Vec::new(),
+        Timestamp(1),
+        0,
+    );
+    writer.write(context).unwrap();
+    Ok(())
+}

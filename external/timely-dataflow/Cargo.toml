@@ -1,0 +1,16 @@
+[workspace]
+members = [
+    "bytes",
+    "communication",
+    "container",
+    "logging",
+    "timely",
+]
+
+[profile.release]
+opt-level = 3
+debug = true
+rpath = false
+# Disable LTO because it causes erratic behavior in Rust 1.53
+#lto = true
+debug-assertions = false

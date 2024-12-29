@@ -1,0 +1,133 @@
+[build-system]
+requires = ["maturin >= 1.4"]
+build-backend = "maturin"
+
+[project]
+name = "pathway"
+dynamic = ["version"]
+requires-python = ">=3.10"
+description = "Pathway is a data processing framework which takes care of streaming data updates for you."
+readme = "README.md"
+classifiers = [
+    "License :: Other/Proprietary License",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+dependencies = [
+    "aiohttp >= 3.8.4",
+    "click >= 8.1",
+    "geopy >= 2.4.0",
+    "h3 >= 4",
+    "numpy >= 1.21",
+    "pandas >= 2.1",
+    "scikit-learn >= 1.0",
+    "shapely >= 2.0.1",
+    "sqlglot == 10.6.1",
+    "pyarrow >= 10.0.0",
+    "requests >= 2.31.0",
+    "python-sat >= 0.1.8.dev",
+    "beartype >= 0.14.0, < 0.16.0",
+    "rich >= 12.6.0",
+    "diskcache >= 5.2.1",
+    "exceptiongroup >= 1.1.3; python_version < '3.11'",
+    "boto3 >= 1.26.76",
+    "google-api-python-client >= 2.108.0",
+    "typing_extensions >= 4.8.0",
+    "panel >= 1.3.1",
+    "jupyter_bokeh >= 3.0.7",
+    "jmespath >= 1.0.1",
+    "aiohttp_cors >= 0.7.0",
+    "opentelemetry-api >= 1.22.0",
+    "opentelemetry-sdk >= 1.22.0",
+    "opentelemetry-exporter-otlp-proto-grpc >= 1.22.0",
+    "fs >= 2.4.16",
+    "async-lru >= 2.0.4",
+    "networkx >= 3.2.1",
+    "google-cloud-pubsub >= 2.21.1",
+    "google-cloud-bigquery",
+    "pydantic ~= 2.9.0",
+    "gitpython >= 3.1.43",
+]
+
+[project.optional-dependencies]
+xpack-llm = [
+    "openai >= 1.58.1",
+    "litellm ~= 1.44.8",
+    "cohere ~= 5.1.0",
+    "tiktoken >= 0.5",
+    "langchain_core == 0.1.30",
+    "langchain == 0.1.11",
+    "llama-index-core ~= 0.10.0",
+    "llama-index-readers-pathway ~= 0.1.0",
+    "llama-index-retrievers-pathway ~= 0.1.0",
+    "tenacity != 8.4.0", # langchain dependency, 8.4.0 wheel is broken
+    "instructor == 1.2.6",
+    "google-generativeai >= 0.7.0",
+]
+xpack-llm-local = [  # requirements that allow local ML inference
+    "unstructured[all-docs] >= 0.16",
+    "surya-ocr == 0.4.14",
+    "sentence_transformers", 
+    "transformers",
+]
+xpack-llm-docs = [
+    "python-docx >= 1.1.2",
+    "openparse == 0.5.6",
+    "unstructured >= 0.16",
+    "pdf2image",
+    "pypdf",
+]
+xpack-sharepoint = [
+    "Office365-REST-Python-Client >= 2.5.3",
+]
+all = [
+    "pathway[xpack-llm]",
+    "pathway[xpack-llm-local]",
+    "pathway[xpack-llm-docs]",
+    "pathway[xpack-sharepoint]",
+    "pathway[airbyte]",
+]
+tests = [
+    "pytest >= 8.0.0, < 9.0.0",
+    "pytest-xdist >= 3.3.1, < 4.0.0",
+    "pytest-rerunfailures >= 13.0, < 14.0",
+    "python-louvain",
+    "openapi_spec_validator",
+    "kafka-python >= 2.0.2",
+    "python-magic",
+    "pathway[all]",
+    "dill >= 0.3.8",
+    "cloudpickle >= 3.0.0",
+    "deltalake >= 0.17.0, < 0.18.0",
+    "fpdf",
+]
+airbyte = [
+    "google-cloud-run",
+    "google-cloud-secret-manager",
+    "google-cloud-logging",
+    "pyyaml",
+    "jinja2",
+]
+
+[project.urls]
+"Homepage" = "https://pathway.com/"
+"Source code" = "https://github.com/pathwaycom/pathway/"
+"Documentation" = "https://pathway.com/developers/"
+"Troubleshooting" = "https://pathway.com/troubleshooting/"
+
+[project.scripts]
+pathway = "pathway.cli:main"
+
+[tool.maturin]
+python-source = "python"
+module-name = "pathway.engine"
+features = ["pyo3/extension-module"]
+
+[tool.mypy]
+python_version = "3.11"
+exclude = ["(^|/)target/", "(^|/)examples/", '(^|/)tests(/.*)?/test_.*\.py$']
+ignore_missing_imports = true
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+strict_equality = true
